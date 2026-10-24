@@ -6,6 +6,12 @@ on:
   push:
   schedule:
     - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      node_version:
+        description: 'Node.js version'
+        required: true
+        default: '22'
 
 permissions:
   contents: read
@@ -21,10 +27,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js 22
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ github.event.inputs.node_version || '22' }}
 
       - name: Run Tests
         run: |
