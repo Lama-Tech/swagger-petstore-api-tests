@@ -4,6 +4,8 @@ run-name: PetStore API Playwright Tests
 on:
   pull_request:
   push:
+  schedule:
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: read
