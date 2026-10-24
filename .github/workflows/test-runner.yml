@@ -2,22 +2,28 @@ name: Playwright Tests
 run-name: PetStore API Playwright Tests
 
 on:
+  pull_request:
   push:
-  
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
 jobs:
   Run-Tests:
     runs-on: ubuntu-latest
-    
+
     steps:
-    
+
       - name: Checkout Repository
         uses: actions/checkout@v4
-        
+
       - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          
+
       - name: Run Tests
         run: |
              npm ci
@@ -29,27 +35,19 @@ jobs:
         with:
           paths: results.xml
 
-          on:
-  pull_request:
-  push:
-permissions:
-  contents: read
-  actions: read
-  checks: write
-jobs:
   build-test:
     name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: Test Report    # checkout the repo
+      - uses: actions/checkout@v6     # checkout the repo
       - run: npm ci                   # install packages
-      - run: npm test                 # run tests (configured to use jest-junit reporter)
+      - run: PLAYWRIGHT_JUNIT_OUTPUT_NAME=results.xml npx playwright test --reporter=list,junit   # run tests with junit reporter
 
       - name: Test Report
         uses: dorny/test-reporter@v3
-        if: {{ success() || failure() }}       # run this step even if previous step failed
+        if: ${{ success() || failure() }}       # run this step even if previous step failed
         with:
           name: Playwright API Tests           # Name of the check run which will be created
           path: results.xml    # Path to test results
-          reporter: jest-junit
+          reporter: java-junit
           fail-on-error: true
