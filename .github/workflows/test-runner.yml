@@ -51,3 +51,11 @@ jobs:
           path: results.xml    # Path to test results
           reporter: java-junit
           fail-on-error: true
+      - name: Upload Playwright Test Results
+        uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: test-results
+          path: |
+                results.xml
+                playwright-report
