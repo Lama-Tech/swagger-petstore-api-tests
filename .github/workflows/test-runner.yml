@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6     # checkout the repo
       - run: npm ci                   # install packages
-      - run: PLAYWRIGHT_JUNIT_OUTPUT_NAME=results.xml npx playwright test --reporter=list,junit   # run tests with junit reporter
+      - run: PLAYWRIGHT_JUNIT_OUTPUT_NAME=results.xml npx playwright test --reporter=list,junit,html # run tests with junit reporter
 
       - name: Test Report
         uses: dorny/test-reporter@v3
